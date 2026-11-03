@@ -2,18 +2,18 @@
 
 import { Progress as ProgressPrimitive } from '@base-ui/react/progress'
 import { cn } from 'cn'
-import Link from 'next/link'
+import { useTranslations } from 'next-intl'
 import type { CSSProperties } from 'react'
 
 import { Paw } from '@/assets/icons/paw'
 import { Button } from '@/components/ui/button'
+import { Link } from '@/i18n/navigation'
 
 export type GoalProgressCardProps = {
   collectedKilograms: number
   goalKilograms?: number
   goalProgress: number
   showGoal: boolean
-  isEnglish: boolean
   className?: string
 }
 
@@ -22,9 +22,9 @@ export function GoalProgressCard({
   goalKilograms = 1000,
   goalProgress,
   showGoal,
-  isEnglish,
   className
 }: GoalProgressCardProps) {
+  const t = useTranslations('GoalProgressCard')
   return (
     <div
       data-slot="goal-progress-card"
@@ -44,7 +44,7 @@ export function GoalProgressCard({
             {collectedKilograms} kg
           </strong>
           <span className="mt-1.75 text-caption font-black tracking-label-wide uppercase">
-            {isEnglish ? 'collected' : 'reunidos'}
+            {t('collected')}
           </span>
         </div>
         <div className="grid text-right">
@@ -52,7 +52,7 @@ export function GoalProgressCard({
             1,000 kg
           </strong>
           <span className="mt-1.75 text-caption font-black tracking-label-wide uppercase">
-            {isEnglish ? 'the goal' : 'la meta'}
+            {t('theGoal')}
           </span>
         </div>
       </div>
@@ -62,11 +62,7 @@ export function GoalProgressCard({
         max={goalKilograms}
         className="relative h-5 rounded-pill border-4 border-ink bg-[#e7dcbf]"
         style={{ '--goal-progress': `${goalProgress}%` } as CSSProperties}
-        aria-label={
-          isEnglish
-            ? `${collectedKilograms} of 1,000 kilograms collected`
-            : `${collectedKilograms} de 1,000 kilogramos reunidos`
-        }
+        aria-label={t('kilogramsCollected', { collected: collectedKilograms })}
       >
         <span
           className={cn(
@@ -85,16 +81,14 @@ export function GoalProgressCard({
         </span>
       </ProgressPrimitive.Root>
       <div className="mt-3.75 flex justify-between text-caption font-black tracking-label uppercase phone:text-micro">
-        <span>{isEnglish ? 'First kibble' : 'Primera croqueta'}</span>
-        <span>{isEnglish ? 'Bowls full' : 'Platos llenos'}</span>
+        <span>{t('firstKibble')}</span>
+        <span>{t('bowlsFull')}</span>
       </div>
       <p className="mt-7 border-t-2 border-dashed border-divider pt-5 text-center font-heading text-body font-extrabold">
-        {isEnglish
-          ? "No donation is too small. Except an imaginary kibble. Those don't count."
-          : 'Ninguna donaci\xF3n es peque\xF1a. Excepto una croqueta imaginaria. Esas no cuentan.'}
+        {t('noDonationIsTooSmallExceptAnImaginary')}
       </p>
       <Button className="mx-auto mt-6.75 w-max" render={<Link href="/como-donar" />}>
-        {isEnglish ? 'Help the goal' : 'Ayudar a la meta'}
+        {t('helpTheGoal')}
       </Button>
     </div>
   )
