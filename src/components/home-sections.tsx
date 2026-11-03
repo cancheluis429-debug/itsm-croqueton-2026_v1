@@ -1,6 +1,6 @@
 import { cva, type VariantProps } from 'class-variance-authority'
 import { cn } from 'cn'
-import Link from 'next/link'
+import { useTranslations } from 'next-intl'
 import type { ReactNode, RefObject } from 'react'
 
 import { Paw } from '@/assets/icons/paw'
@@ -10,6 +10,7 @@ import { Logo } from '@/components/layout/logo'
 import { Button } from '@/components/ui/button'
 import { Container } from '@/components/ui/container'
 import { Eyebrow } from '@/components/ui/eyebrow'
+import { Link } from '@/i18n/navigation'
 import { chapterFiveImage, chapterSixImage } from '@/lib/images'
 
 const storyChapterVariants = cva('relative isolate flex items-center', {
@@ -136,14 +137,13 @@ export function EventDetailItem({
 }
 
 export function HomeRescueSection({
-  isEnglish,
   sparkleRescue,
   sectionRef
 }: {
-  isEnglish: boolean
   sparkleRescue: boolean
   sectionRef: RefObject<HTMLElement | null>
 }) {
+  const t = useTranslations('HomeRescueSection')
   return (
     <section
       ref={sectionRef}
@@ -166,53 +166,43 @@ export function HomeRescueSection({
       <Container className="grid min-h-[inherit] grid-cols-[0.92fr_1.08fr] items-center tablet:grid-cols-[1fr] tablet:pt-25">
         <div className="pl-7 tablet:pl-0">
           <Eyebrow variant="section" tone="accent">
-            {isEnglish ? 'Chapter 05 \xB7 The way out' : 'Cap\xEDtulo 05 \xB7 La salida'}
+            {t('chapter05TheWayOut')}
           </Eyebrow>
           <h2 className="mb-4.5 min-[541px]:text-[clamp(66px,6.5vw,104px)]">
-            {isEnglish ? 'He is not' : '\xA1No est\xE1'}
+            {t('heIsNot')}
             <br />
-            <span className="text-accent">{isEnglish ? 'alone!' : 'solo!'}</span>
+            <span className="text-accent">{t('alone')}</span>
           </h2>
           <p className="mb-7 text-lg leading-normal font-extrabold">
-            {isEnglish
-              ? 'When friends arrive, so do laughs\u2026'
-              : 'Cuando llegan amigos, llegan risas\u2026'}
+            {t('whenFriendsArriveSoDoLaughs')}
             <br />
-            {isEnglish ? 'and lots and lots of kibble.' : 'y muchas, muchas croquetas.'}
+            {t('andLotsAndLotsOfKibble')}
           </p>
           <p className="-mt-3 mb-6 max-w-118.75 text-[14px] font-extrabold opacity-72">
-            {isEnglish
-              ? "You don't need to donate a mountain. One bag can change the ending too."
-              : 'No necesitas donar una monta\xF1a. Una bolsa tambi\xE9n cambia el final.'}
+            {t('youDonTNeedToDonateAMountain')}
           </p>
           <div className="grid max-w-123.75 gap-2.75">
             <EventDetailItem
               badgeTone="accent"
               badge="26"
-              title={isEnglish ? 'Saturday, October 26' : 'S\xE1bado 26 de octubre'}
-              subtitle={isEnglish ? '10:00 to 17:00' : 'De 10:00 a 17:00 h'}
+              title={t('saturdayOctober26')}
+              subtitle={t('text1000To1700')}
             />
             <EventDetailItem
               badgeTone="ink"
               badge="●"
-              title={isEnglish ? 'Main plaza' : 'Explanada principal'}
-              subtitle={
-                isEnglish ? 'Higher Technological Institute' : 'Instituto Tecnol\xF3gico Superior'
-              }
+              title={t('mainPlaza')}
+              subtitle={t('higherTechnologicalInstitute')}
             />
             <EventDetailItem
               badgeTone="ink"
               badge="▰"
-              title={isEnglish ? 'Bring sealed dog food' : 'Trae alimento sellado'}
-              subtitle={
-                isEnglish ? 'Kibble bags of any size' : 'Bolsas de croquetas de cualquier tama\xF1o'
-              }
+              title={t('bringSealedDogFood')}
+              subtitle={t('kibbleBagsOfAnySize')}
             />
           </div>
-          <NoteCallout tone="accent" title={isEnglish ? 'No fine print' : 'Sin letras chiquitas'}>
-            {isEnglish
-              ? 'We receive sealed food, check its date and deliver it to people who care for dogs.'
-              : 'Recibimos alimento cerrado, revisamos su fecha y lo entregamos a quienes cuidan perritos.'}
+          <NoteCallout tone="accent" title={t('noFinePrint')}>
+            {t('weReceiveSealedFoodCheckItsDateAnd')}
           </NoteCallout>
         </div>
         <div className="relative h-175 tablet:min-h-170 phone:min-h-162.5">
@@ -223,10 +213,8 @@ export function HomeRescueSection({
           <span className="absolute top-1.25 left-[48%] text-[46px] font-black text-ink">◆</span>
           <StoryImage
             src={chapterFiveImage}
-            alt="Grupo de seis perros sosteniendo bolsas de alimento donado"
-            label={
-              isEnglish ? 'Rescue plan: friends + kibble.' : 'Plan de rescate: amigos + croquetas.'
-            }
+            alt={t('rescueDogsAlt')}
+            label={t('rescuePlanFriendsKibble')}
             className="top-26.25 left-1/2 w-140 -translate-x-1/2 rotate-3 phone:w-[min(88vw,420px)] phone:rotate-2 [&_figcaption]:bg-accent [&_figcaption]:text-white [&>div]:aspect-[1.5]"
           />
         </div>
@@ -236,14 +224,13 @@ export function HomeRescueSection({
 }
 
 export function HomeFinaleSection({
-  isEnglish,
   celebrateFinale,
   sectionRef
 }: {
-  isEnglish: boolean
   celebrateFinale: boolean
   sectionRef: RefObject<HTMLElement | null>
 }) {
+  const t = useTranslations('HomeFinaleSection')
   return (
     <section
       ref={sectionRef}
@@ -268,45 +255,37 @@ export function HomeFinaleSection({
           <span className="absolute top-25 -left-2.5 size-122.5 max-h-[94%] max-w-[94%] rounded-circle bg-brand before:absolute before:-inset-10 before:rounded-circle before:bg-[repeating-conic-gradient(from_0deg,transparent_0deg_12deg,rgba(255,255,255,0.35)_12deg_18deg)] before:content-['']" />
           <StoryImage
             src={chapterSixImage}
-            alt="Perrito musculoso y feliz rodeado de bolsas, platos y croquetas donadas"
-            label={
-              isEnglish ? 'Good ending. Very strong dog.' : 'Final bueno. Perrito fuert\xEDsimo.'
-            }
+            alt={t('finaleDogAlt')}
+            label={t('goodEndingVeryStrongDog')}
             className="top-5 left-13.75 w-98.75 -rotate-3 phone:left-1/2 phone:w-[min(88vw,420px)] phone:-translate-x-1/2 phone:-rotate-2 [&>div]:aspect-[0.778] [&>div]:border-[#fff3c1]"
           />
         </div>
         <div className="relative z-4 pl-8.75 tablet:pl-0">
-          <Eyebrow className="text-[#fff9e8]">
-            {isEnglish ? 'Happy ending unlocked' : 'Final feliz desbloqueado'}
-          </Eyebrow>
+          <Eyebrow className="text-[#fff9e8]">{t('happyEndingUnlocked')}</Eyebrow>
           <h2 className="mt-4.25 mb-6.75 min-[541px]:text-[clamp(55px,5.6vw,86px)]">
-            {isEnglish ? 'Together we can' : '\xA1Juntos podemos'}
+            {t('togetherWeCan')}
             <br />
-            {isEnglish ? 'make a ' : 'hacer la '}
-            <span className="text-brand">{isEnglish ? 'difference!' : 'diferencia!'}</span>
+            {t('makeA')}
+            <span className="text-brand">{t('difference')}</span>
           </h2>
           <p className="max-w-150 text-lead leading-loose font-extrabold">
-            {isEnglish
-              ? 'Before: an empty bowl. After: friends, food and a suspiciously muscular dog.'
-              : 'Antes: un plato vac\xEDo. Despu\xE9s: amigos, comida y un perrito sospechosamente musculoso.'}
+            {t('beforeAnEmptyBowlAfterFriendsFoodAnd')}
           </p>
           <Button variant="card-cta" className="mt-2.5" render={<Link href="/como-donar" />}>
-            {isEnglish ? 'I want to donate' : 'Quiero donar'} <span>→</span>
+            {t('iWantToDonate')} <span>→</span>
           </Button>
           <small className="mt-5.25 block font-extrabold opacity-75">
-            {isEnglish
-              ? "Opens your email. No endless forms, dog's word."
-              : 'Abre tu correo. Sin formularios eternos, palabra de perrito.'}
+            {t('opensYourEmailNoEndlessFormsDogS')}
           </small>
-          <div className="mt-6 flex flex-wrap gap-2" aria-label="Compromisos del Croquetón">
+          <div className="mt-6 flex flex-wrap gap-2" aria-label={t('commitmentsLabel')}>
             <span className="rounded-md bg-[rgba(255,255,255,0.14)] px-2.75 py-1.75 text-[12px] leading-note font-black tracking-[0.04em]">
-              {isEnglish ? 'Sealed food' : 'Alimento sellado'}
+              {t('sealedFood')}
             </span>
             <span className="rounded-md bg-[rgba(255,255,255,0.14)] px-2.75 py-1.75 text-[12px] leading-note font-black tracking-[0.04em]">
-              {isEnglish ? 'Responsible delivery' : 'Entrega responsable'}
+              {t('responsibleDelivery')}
             </span>
             <span className="rounded-md bg-[rgba(255,255,255,0.14)] px-2.75 py-1.75 text-[12px] leading-note font-black tracking-[0.04em]">
-              {isEnglish ? 'Shared impact' : 'Impacto compartido'}
+              {t('sharedImpact')}
             </span>
           </div>
         </div>
@@ -315,21 +294,22 @@ export function HomeFinaleSection({
   )
 }
 
-export function SiteFooter({ isEnglish }: { isEnglish: boolean }) {
+export function SiteFooter() {
+  const t = useTranslations('SiteFooter')
   return (
     <footer className="[&_.logo-mark]:bg-brand [&_.logo-mark]:text-ink">
       <Container className="grid grid-cols-[1.3fr_0.7fr_1fr_1fr] items-start gap-11.25 tablet:grid-cols-[1fr_1fr] phone:grid-cols-[1fr]">
         <div>
           <Logo />
           <p className="mt-4.25 text-[14px] leading-copy text-[#9fa6b6]">
-            {isEnglish ? 'Kibble by kibble,' : 'De croqueta en croqueta,'}
+            {t('kibbleByKibble')}
             <br />
-            {isEnglish ? 'we change a story.' : 'cambiamos una historia.'}
+            {t('weChangeAStory')}
           </p>
         </div>
         <div className="flex flex-col gap-2.25 text-body-sm leading-label text-[#abb1c0] shadow-none outline-0 [&_a]:wrap-anywhere [&_a]:shadow-none! [&_a]:outline-0! [&_a]:hover:text-brand">
           <strong className="mb-1.75 text-small tracking-[0.12em] text-white uppercase">
-            {isEnglish ? 'Follow us' : 'S\xEDguenos'}
+            {t('followUs')}
           </strong>
           <a href="https://www.instagram.com/" target="_blank" rel="noreferrer">
             Instagram
@@ -348,7 +328,7 @@ export function SiteFooter({ isEnglish }: { isEnglish: boolean }) {
         </div>
         <div className="flex flex-col gap-2.25 text-body-sm leading-label text-[#abb1c0] [&_a]:wrap-anywhere [&_a]:hover:text-brand">
           <strong className="mb-1.75 text-small tracking-[0.12em] text-white uppercase">
-            {isEnglish ? 'Contact' : 'Contacto'}
+            {t('contact')}
           </strong>
           <a href="mailto:croqueton@tecnologico.edu.mx">croqueton@tecnologico.edu.mx</a>
           <a href="tel:+0001234567">(000) 123 4567</a>
@@ -358,16 +338,14 @@ export function SiteFooter({ isEnglish }: { isEnglish: boolean }) {
             ITS
           </span>
           <p className="m-0 text-small leading-tight font-extrabold">
-            {isEnglish ? 'Higher' : 'Instituto'}
+            {t('higher')}
             <br />
-            {isEnglish ? 'Technological Institute' : 'Tecnol\xF3gico Superior'}
+            {t('technologicalInstitute')}
           </p>
         </div>
       </Container>
       <Container className="mt-13.75 flex justify-between border-t border-[#393e51] pt-5.5 text-[13px] text-[#858c9d] phone:flex-col phone:gap-2">
-        <span>
-          {isEnglish ? 'Made with love and lots of kibble.' : 'Hecho con amor y muchas croquetas.'}
-        </span>
+        <span>{t('madeWithLoveAndLotsOfKibble')}</span>
         <span>© 2026 Croquetón</span>
       </Container>
     </footer>
