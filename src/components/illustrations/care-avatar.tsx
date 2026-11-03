@@ -1,3 +1,5 @@
+import { useTranslations } from 'next-intl'
+
 function CareAvatar({
   furColor = '#d98a4e',
   shirtColor = '#ef6547',
@@ -7,12 +9,13 @@ function CareAvatar({
   outfit = 'shirt',
   hair = 'none'
 }) {
+  const t = useTranslations('CareAvatar')
   return (
     <svg
       className="care-avatar relative z-2 mt-6.25 h-162.5 w-100 drop-shadow-[12px_15px_0_var(--ink-faint)] phone:h-147.5 phone:w-[min(100%,330px)]"
       viewBox="0 0 400 650"
       role="img"
-      aria-label="Avatar de perro antropomórfico con gafas, camiseta, shorts y tenis personalizables"
+      aria-label={t('avatarAlt')}
     >
       <ellipse cx="202" cy="625" rx="132" ry="18" fill="#202436" opacity=".12" />
       <path
