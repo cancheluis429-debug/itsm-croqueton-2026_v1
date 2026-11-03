@@ -1,8 +1,8 @@
 'use client'
 
 import { cn } from 'cn'
+import { useTranslations } from 'next-intl'
 import Image from 'next/image'
-import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
 
 import { ArrowDown } from '@/assets/icons/arrow-down'
@@ -22,7 +22,7 @@ import { ThemeToggle } from '@/components/layout/theme-toggle'
 import { Button } from '@/components/ui/button'
 import { Container } from '@/components/ui/container'
 import { Eyebrow } from '@/components/ui/eyebrow'
-import { dogFacts, dogFactsEn } from '@/lib/content'
+import { Link } from '@/i18n/navigation'
 import {
   chapterOneImage,
   chapterTwoImage,
@@ -30,18 +30,15 @@ import {
   chapterFourImage,
   heroDogImage
 } from '@/lib/images'
-import { useLanguage } from '@/providers/language-provider'
 
 export default function HomePage() {
-  const { language } = useLanguage()
+  const t = useTranslations('HomePage')
   const [mascot, setMascot] = useState({ message: '', secretFound: false })
   const [isNavScrolled, setIsNavScrolled] = useState(false)
   const [celebrateFinale, setCelebrateFinale] = useState(false)
   const [sparkleRescue, setSparkleRescue] = useState(false)
   const finaleRef = useRef<HTMLElement | null>(null)
   const rescueRef = useRef<HTMLElement | null>(null)
-
-  const isEnglish = language === 'en'
 
   useEffect(() => {
     const updateNavigation = () => setIsNavScrolled(window.scrollY > 24)
@@ -77,12 +74,12 @@ export default function HomePage() {
     setMascot((current) => {
       if (!current.secretFound) {
         return {
-          message: isEnglish ? 'You found the secret button' : 'Haz encontrado el bot\xF3n secreto',
+          message: t('secretFound'),
           secretFound: true
         }
       }
 
-      const facts = isEnglish ? dogFactsEn : dogFacts
+      const facts = t.raw('dogFacts') as string[]
       const availableFacts = facts.filter((fact) => fact !== current.message)
       const randomFact = availableFacts[Math.floor(Math.random() * availableFacts.length)]
 
@@ -94,7 +91,7 @@ export default function HomePage() {
     <main>
       <LanguageToggle />
       <ThemeToggle />
-      <SkipLink isEnglish={isEnglish} />
+      <SkipLink />
       <SiteNavigation home isScrolled={isNavScrolled} />
 
       <section
@@ -107,26 +104,27 @@ export default function HomePage() {
         <Paw className="absolute right-[4%] bottom-32.5 w-32.5 rotate-23 text-fg-paw opacity-55" />
         <Container className="grid grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] items-center gap-x-[clamp(56px,7vw,120px)] pt-6 pb-28 tablet:grid-cols-[1fr] tablet:gap-y-18 tablet:pt-0 tablet:pb-35 phone:gap-y-14 phone:pb-32">
           <div className="z-5 pl-7.5 tablet:p-0">
-            <Eyebrow>{isEnglish ? 'A furry tale' : 'Una historia de pelos'}</Eyebrow>
-            <h1 className="mt-3 mb-8.5 text-[clamp(86px,9.5vw,146px)] leading-[0.72] font-extrabold text-foreground tablet:text-[104px] phone:text-[70px]">
+            <Eyebrow>{t('eyebrow')}</Eyebrow>
+            <h1
+              aria-label={t('title')}
+              className="mt-3 mb-8.5 text-[clamp(86px,9.5vw,146px)] leading-[0.72] font-extrabold text-foreground tablet:text-[104px] phone:text-[70px]"
+            >
               Croque<span className="text-accent">tón</span>
             </h1>
             <p className="mb-5 font-heading text-[clamp(31px,3vw,37px)] leading-[1.08] font-bold phone:text-title-sm">
-              {isEnglish ? "My life couldn't" : 'Mi vida no podr\xEDa'}
+              {t('introFirstLine')}
               <br />
-              {isEnglish ? 'be better.' : 'ir mejor.'}
+              {t('introSecondLine')}
             </p>
             <p className="max-w-107.5 text-body leading-copy font-bold opacity-72">
-              {isEnglish
-                ? 'Narrated by Croqueto, certified expert in naps and second chances.'
-                : 'Narrado por Croqueto, experto certificado en siestas y segundas oportunidades.'}
+              {t('introDescription')}
             </p>
             <div className="mt-9 flex flex-wrap items-center gap-x-7 gap-y-3.5 phone:mt-7.5">
               <Button variant="hero" className="phone:w-full" render={<Link href="/como-donar" />}>
-                {isEnglish ? 'I want to donate' : 'Quiero donar'}
+                {t('donate')}
               </Button>
               <Button variant="link-border" className="text-[15px]" render={<a href="#historia" />}>
-                {isEnglish ? 'Read the story' : 'Leer la historia'}
+                {t('readStory')}
               </Button>
             </div>
           </div>
@@ -136,12 +134,12 @@ export default function HomePage() {
               className="group/mascot absolute inset-0 z-3 border-0 bg-transparent p-0 text-ink"
               type="button"
               onClick={surpriseMascot}
-              aria-label="Preguntarle un secreto a Croqueto"
+              aria-label={t('askCroquetoSecret')}
             >
               <Image
                 className="absolute top-2 right-4 z-3 h-auto w-[min(565px,100%)] transform-[rotate(2deg)] overflow-visible filter-[drop-shadow(0_18px_0_rgba(154,95,0,0.12))] transition-[transform] duration-200 ease-[ease] group-hover/mascot:transform-[rotate(-1deg)_translateY(-5px)] tablet:right-1/2 tablet:w-[min(500px,100%)] tablet:max-w-none tablet:transform-[translateX(50%)] tablet:group-hover/mascot:transform-[translateX(50%)_translateY(-5px)] phone:w-[min(104vw,380px)]"
                 src={heroDogImage}
-                alt="Croqueto, la mascota del Croquetón, con gafas de sol y dos premios en la boca"
+                alt={t('croquetoHeroAlt')}
               />
             </button>
             <p
@@ -167,9 +165,7 @@ export default function HomePage() {
           className="absolute bottom-11 left-1/2 z-8 flex -translate-x-1/2 items-center gap-3.75 text-[12px] font-black tracking-[0.14em] uppercase"
           href="#historia"
         >
-          <span>
-            {isEnglish ? 'Scroll to follow the story' : 'Desliza para seguir la historia'}
-          </span>
+          <span>{t('scrollStory')}</span>
           <span className="grid size-9.5 animate-[bob_1.8s_ease-in-out_infinite] place-items-center rounded-circle bg-ink text-white motion-reduce:animate-none! [&_svg]:w-5">
             <ArrowDown />
           </span>
@@ -192,41 +188,35 @@ export default function HomePage() {
         containerClassName="grid-cols-[1.05fr_0.95fr] tablet:pt-22.5 tablet:pb-25"
         mediaWrapperClassName="h-162.5 tablet:order-2 tablet:h-147.5 phone:h-120"
         contentWrapperClassName="pl-6.25 tablet:px-2.5! tablet:py-0!"
-        eyebrow={isEnglish ? 'Chapter 01 \xB7 The good life' : 'Cap\xEDtulo 01 \xB7 La buena vida'}
+        eyebrow={t('chapter01TheGoodLife')}
         eyebrowTone="accent"
         titleClassName="min-[541px]:text-[clamp(50px,4.7vw,74px)]"
         title={
           <>
-            {isEnglish ? 'Full belly,' : 'Pancita llena,'}
+            {t('fullBelly')}
             <br />
-            <em className="text-[#ef6547] not-italic">
-              {isEnglish ? 'happy heart.' : 'coraz\xF3n contento.'}
-            </em>
+            <em className="text-[#ef6547] not-italic">{t('happyHeart')}</em>
           </>
         }
         media={
           <>
             <span className="absolute top-16.25 left-3.75 z-9 -rotate-4 rounded-lg border-4 border-[#fff7e5] bg-ink px-5.25 py-3.25 font-heading text-lead-lg font-extrabold text-white shadow-[7px_7px_0_var(--ink-soft)] phone:top-12 phone:left-0.5 phone:text-[16px]">
-              {isEnglish ? 'Day 1: everything under control' : 'D\xEDa 1: todo bajo control'}
+              {t('day1EverythingUnderControl')}
             </span>
             <StoryImage
               src={chapterOneImage}
-              alt="Perrito con gafas sosteniendo una tostada en un martes soleado"
-              label={
-                isEnglish ? 'Full belly. Zero pending tasks.' : 'Pancita llena. Cero pendientes.'
-              }
+              alt={t('dogToastAlt')}
+              label={t('fullBellyZeroPendingTasks')}
               className="top-23.75 left-11.25 w-126.25 rotate-[-2.5deg] tablet:left-1/2 tablet:-translate-x-1/2 tablet:-rotate-2 phone:top-18.75 phone:w-[min(88vw,440px)] [&_img]:object-[center_58%] [&_img]:filter-[saturate(0.92)_contrast(1.03)_sepia(0.05)] [&>div]:aspect-square"
             />
           </>
         }
       >
         <p className="max-w-132.5 text-[clamp(18px,1.6vw,20px)] leading-loose font-bold">
-          {isEnglish
-            ? 'Full bowl, nap pending. Life was perfect.'
-            : 'Plato lleno, siesta pendiente. La vida era perfecta.'}
+          {t('fullBowlNapPendingLifeWasPerfect')}
         </p>
         <span className="inline-flex rotate-1 border-y-2 border-dashed border-stroke py-2 text-[12px] font-black tracking-label-wide text-foreground uppercase">
-          {isEnglish ? 'Worry level: zero' : 'Nivel de preocupaci\xF3n: cero'}
+          {t('worryLevelZero')}
         </span>
       </StoryChapter>
 
@@ -245,36 +235,30 @@ export default function HomePage() {
         containerClassName="grid-cols-[1.08fr_0.92fr] tablet:pt-25 tablet:pb-17.5"
         mediaWrapperClassName="h-162.5 tablet:order-2 tablet:h-142.5"
         contentWrapperClassName="tablet:px-2.5! tablet:py-0!"
-        eyebrow={isEnglish ? 'Chapter 02 \xB7 The fall' : 'Cap\xEDtulo 02 \xB7 La ca\xEDda'}
+        eyebrow={t('chapter02TheFall')}
         eyebrowTone="brand"
         title={
           <>
-            {isEnglish ? 'What could' : '\xBFQu\xE9 podr\xEDa'}
+            {t('whatCould')}
             <br />
-            {isEnglish ? 'go wrong?' : 'salir mal?'}
+            {t('goWrong')}
           </>
         }
         media={
           <StoryImage
             src={chapterTwoImage}
-            alt="Cheems intenta alcanzar una tostada que sale volando durante una tormenta"
-            label={
-              isEnglish
-                ? "Everything was fine\u2026 until it wasn't."
-                : 'Todo iba bien\u2026 hasta que dej\xF3 de ir bien.'
-            }
+            alt={t('cheemsStormAlt')}
+            label={t('everythingWasFineUntilItWasnT')}
             className="top-38.75 left-15.5 w-107.5 -rotate-3 tablet:right-auto tablet:left-1/2 tablet:w-[min(100%,590px)] tablet:-translate-x-1/2 tablet:-rotate-2 [&_img]:filter-[saturate(0.8)_contrast(1.04)] [&>div]:aspect-square"
           />
         }
       >
         <p className="max-w-132.5 text-[clamp(18px,1.6vw,20px)] leading-loose font-bold">
-          {isEnglish
-            ? 'Ah\u2026 well. At least I still have my savings.'
-            : 'Ah\u2026 bueno. Al menos todav\xEDa tengo mis ahorros.'}
+          {t('ahWellAtLeastIStillHaveMy')}
         </p>
         <strong
           className="mt-4.5 block font-heading text-[72px] leading-none tracking-[0.2em] text-[#8ca2b7]"
-          aria-label="Silencio incómodo"
+          aria-label={t('awkwardSilence')}
         >
           …
         </strong>
@@ -287,33 +271,27 @@ export default function HomePage() {
         reverseOnDesktop
         contentWrapperClassName="pl-8.75 tablet:order-1 tablet:px-2.5! tablet:py-0!"
         mediaWrapperClassName="h-162.5 tablet:order-2"
-        eyebrow={isEnglish ? 'Chapter 03 \xB7 Sinking' : 'Cap\xEDtulo 03 \xB7 El hundimiento'}
+        eyebrow={t('chapter03Sinking')}
         eyebrowTone="accent"
         title={
           <>
-            {isEnglish ? 'Things got a' : 'La cosa se puso'}
+            {t('thingsGotA')}
             <br />
-            {isEnglish ? 'little ' : 'un poquito '}
-            <em className="text-[#777d82] not-italic">{isEnglish ? 'gray.' : 'gris.'}</em>
+            {t('little')}
+            <em className="text-[#777d82] not-italic">{t('gray')}</em>
           </>
         }
         media={
           <MoodPollCard
             src={chapterThreeImage}
-            alt="Cheems llorando junto a las opciones feliz y estuviste llorando"
-            label={
-              isEnglish
-                ? 'Mood: doing my best.'
-                : 'Estado de \xE1nimo: haciendo lo mejor que puedo.'
-            }
+            alt={t('cheemsCryingAlt')}
+            label={t('moodDoingMyBest')}
             className="top-37.5 right-22 w-110 rotate-2 tablet:right-auto tablet:left-1/2 tablet:w-[min(100%,590px)] tablet:-translate-x-1/2 tablet:-rotate-2 [&_img]:filter-[saturate(0.72)_contrast(1.03)] [&>div]:aspect-square"
           />
         }
       >
         <p className="max-w-132.5 font-heading text-[20px] leading-note font-bold">
-          {isEnglish
-            ? 'Dignity was intact. The eyeliner, not so much.'
-            : 'La dignidad segu\xEDa intacta. El delineador, no tanto.'}
+          {t('dignityWasIntactTheEyelinerNotSoMuch')}
         </p>
       </StoryChapter>
 
@@ -322,25 +300,21 @@ export default function HomePage() {
         containerClassName="grid-cols-[1fr_1fr]"
         mediaWrapperClassName="h-150 tablet:mt-25"
         contentWrapperClassName="pl-7.5 tablet:px-2.5! tablet:pt-0! tablet:pb-22.5!"
-        eyebrow={isEnglish ? 'Chapter 04 \xB7 Rock bottom' : 'Cap\xEDtulo 04 \xB7 El fondo'}
+        eyebrow={t('chapter04RockBottom')}
         eyebrowTone="brand"
         titleClassName="min-[541px]:text-[clamp(46px,4.3vw,68px)]"
         title={
           <>
-            {isEnglish ? 'I guess this is' : 'Supongo que este es'}
+            {t('iGuessThisIs')}
             <br />
-            {isEnglish ? 'my worst moment\u2026' : 'mi peor momento\u2026'}
+            {t('myWorstMoment')}
           </>
         }
         media={
           <StoryImage
             src={chapterFourImage}
-            alt="Cheems descansa en una cama de hospital con apoyo de oxígeno"
-            label={
-              isEnglish
-                ? 'This is where the story stopped being a joke.'
-                : 'Aqu\xED la historia dej\xF3 de ser un chiste.'
-            }
+            alt={t('cheemsHospitalAlt')}
+            label={t('thisIsWhereTheStoryStoppedBeingA')}
             className="top-0 left-7.5 w-111.25 -rotate-2 tablet:left-1/2 tablet:-translate-x-1/2 phone:w-[min(88vw,420px)] [&_figcaption]:bg-[#a8c8d2] [&_img]:filter-[saturate(0.7)_contrast(1.03)] [&>div]:aspect-[0.667]"
           />
         }
@@ -348,44 +322,33 @@ export default function HomePage() {
         <div className="flex max-w-130 items-center gap-5.5 rounded-dialog-sm border-l-9 border-brand bg-[#eff1ea] px-6.25 py-5 text-ink shadow-[10px_10px_0_#34495c]">
           <span className="font-heading text-[43px] font-extrabold text-accent">01</span>
           <p className="m-0 max-w-132.5 text-[clamp(18px,1.6vw,20px)] leading-loose font-bold">
-            <strong>{isEnglish ? 'Hunger is real.' : 'El hambre s\xED es real.'}</strong>
+            <strong>{t('hungerIsReal')}</strong>
             <br />
-            {isEnglish
-              ? 'That is why every sealed bag counts.'
-              : 'Por eso cada bolsa sellada cuenta.'}
+            {t('thatIsWhyEverySealedBagCounts')}
           </p>
         </div>
         <p className="mt-5.5 max-w-132.5 text-body-sm leading-loose font-bold text-[#dce8ee]">
-          {isEnglish
-            ? 'Croqueto may be a character. The need he represents is not.'
-            : 'Croqueto puede ser un personaje. La necesidad que representa no lo es.'}
+          {t('croquetoMayBeACharacterTheNeedHe')}
         </p>
       </StoryChapter>
 
-      <HomeRescueSection
-        isEnglish={isEnglish}
-        sparkleRescue={sparkleRescue}
-        sectionRef={rescueRef}
-      />
+      <HomeRescueSection sparkleRescue={sparkleRescue} sectionRef={rescueRef} />
 
-      <HomeFinaleSection
-        isEnglish={isEnglish}
-        celebrateFinale={celebrateFinale}
-        sectionRef={finaleRef}
-      />
+      <HomeFinaleSection celebrateFinale={celebrateFinale} sectionRef={finaleRef} />
 
-      <SiteFooter isEnglish={isEnglish} />
+      <SiteFooter />
     </main>
   )
 }
 
-function SkipLink({ isEnglish }: { isEnglish: boolean }) {
+function SkipLink() {
+  const t = useTranslations('SkipLink')
   return (
     <a
       className="fixed top-4 left-4 z-100 translate-y-[-160%] rounded-pill px-4 py-3 font-black shadow-md transition-transform duration-200 ease-out focus:translate-y-0"
       href="#historia"
     >
-      {isEnglish ? 'Skip to the story' : 'Saltar a la historia'}
+      {t('skipToTheStory')}
     </a>
   )
 }
