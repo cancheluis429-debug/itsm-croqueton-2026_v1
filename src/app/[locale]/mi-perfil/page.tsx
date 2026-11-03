@@ -1,7 +1,6 @@
 'use client'
 
-import Link from 'next/link'
-import { redirect } from 'next/navigation'
+import { useLocale, useTranslations } from 'next-intl'
 import { useState } from 'react'
 
 import { SmallDogMascot } from '@/assets/icons/small-dog-mascot'
@@ -13,21 +12,22 @@ import { Button } from '@/components/ui/button'
 import { Container } from '@/components/ui/container'
 import { Eyebrow } from '@/components/ui/eyebrow'
 import { FieldLabel, TextInput } from '@/components/ui/field'
+import { Link } from '@/i18n/navigation'
+import { redirect } from '@/i18n/navigation'
 import { useNavigate } from '@/lib/navigation'
 import { useCommunity } from '@/providers/community-provider'
-import { useLanguage } from '@/providers/language-provider'
 
 export default function ProfilePage() {
-  const { language } = useLanguage()
+  const t = useTranslations('ProfilePage')
+  const language = useLocale()
   const { user, posts, petFurColor, updateProfile, updatePassword, signOut } = useCommunity()
   const navigate = useNavigate()
   const [name, setName] = useState(user?.name ?? '')
   const [password, setPassword] = useState('')
   const [message, setMessage] = useState('')
 
-  if (!user) redirect('/guaubook')
+  if (!user) return redirect({ href: '/guaubook', locale: language })
 
-  const isEnglish = language === 'en'
   const userPosts = posts.filter((post) => post.author === user.name)
 
   return (
@@ -44,7 +44,7 @@ export default function ProfilePage() {
             />
           </div>
           <div>
-            <Eyebrow>{isEnglish ? 'My profile' : 'Mi perfil'}</Eyebrow>
+            <Eyebrow>{t('myProfile')}</Eyebrow>
             <h1 className="mt-2.75 mb-5 text-[clamp(64px,7vw,104px)] leading-display">
               {user.name}
             </h1>
@@ -55,31 +55,29 @@ export default function ProfilePage() {
               furColor={petFurColor}
               className="h-32.5 w-28.75 tablet:h-21.25 tablet:w-18.75"
             />
-            <span>{isEnglish ? 'Pet' : 'Mascota'} · Chispita</span>
+            <span>{t('pet')} · Chispita</span>
           </div>
         </div>
         <div className="mt-13 grid grid-cols-[minmax(300px,0.72fr)_minmax(0,1fr)] items-start gap-13.75 tablet:grid-cols-[1fr] tablet:gap-8.75 phone:mt-8.75">
           <section className="grid gap-6 rounded-3xl border-4 border-ink bg-card p-6.75 shadow-card phone:p-4.75">
-            <h2 className="m-0 min-[541px]:text-[42px]">
-              {isEnglish ? 'Your settings' : 'Tus ajustes'}
-            </h2>
+            <h2 className="m-0 min-[541px]:text-[42px]">{t('yourSettings')}</h2>
             <form
               className="grid gap-3"
               onSubmit={(event) => {
                 event.preventDefault()
                 updateProfile(name)
-                setMessage(isEnglish ? 'Profile updated.' : 'Perfil actualizado.')
+                setMessage(t('profileUpdated'))
               }}
             >
               <FieldLabel>
-                {isEnglish ? 'Name' : 'Nombre'}
+                {t('name')}
                 <TextInput
                   variant="control"
                   value={name}
                   onChange={(event) => setName(event.target.value)}
                 />
               </FieldLabel>
-              <Button type="submit">{isEnglish ? 'Edit profile' : 'Editar perfil'}</Button>
+              <Button type="submit">{t('editProfile')}</Button>
             </form>
             <form
               className="grid gap-3"
@@ -88,12 +86,12 @@ export default function ProfilePage() {
                 if (password.length >= 6) {
                   updatePassword(password)
                   setPassword('')
-                  setMessage(isEnglish ? 'Password changed.' : 'Contrase\xF1a actualizada.')
+                  setMessage(t('passwordChanged'))
                 }
               }}
             >
               <FieldLabel>
-                {isEnglish ? 'New password' : 'Nueva contrase\xF1a'}
+                {t('newPassword')}
                 <TextInput
                   type="password"
                   variant="control"
@@ -103,7 +101,7 @@ export default function ProfilePage() {
                 />
               </FieldLabel>
               <Button variant="underline" type="submit" className="text-ink">
-                {isEnglish ? 'Change password' : 'Cambiar contrase\xF1a'}
+                {t('changePassword')}
               </Button>
             </form>
             <Button
@@ -114,7 +112,7 @@ export default function ProfilePage() {
                 navigate('/')
               }}
             >
-              {isEnglish ? 'Sign out' : 'Cerrar sesi\xF3n'}
+              {t('signOut')}
             </Button>
             <small aria-live="polite" className="font-extrabold">
               {message}
@@ -122,11 +120,9 @@ export default function ProfilePage() {
           </section>
           <section>
             <div className="mb-5 flex items-baseline justify-between">
-              <h2 className="m-0 min-[541px]:text-[42px]">
-                {isEnglish ? 'Your posts' : 'Tus publicaciones'}
-              </h2>
+              <h2 className="m-0 min-[541px]:text-[42px]">{t('yourPosts')}</h2>
               <Link href="/guaubook" className="font-black underline">
-                {isEnglish ? 'Go to GuauBook' : 'Ir a GuauBook'}
+                {t('goToGuauBook')}
               </Link>
             </div>
             {userPosts.length ? (
@@ -136,13 +132,7 @@ export default function ProfilePage() {
                 ))}
               </div>
             ) : (
-              <EmptyStateCard
-                title={
-                  isEnglish
-                    ? 'Your first post will appear here.'
-                    : 'Tu primera publicaci\xF3n aparecer\xE1 aqu\xED.'
-                }
-              />
+              <EmptyStateCard title={t('yourFirstPostWillAppearHere')} />
             )}
           </section>
         </div>
