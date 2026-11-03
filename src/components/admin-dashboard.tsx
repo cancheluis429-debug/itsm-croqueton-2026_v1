@@ -1,11 +1,12 @@
 import { cva, type VariantProps } from 'class-variance-authority'
-import Link from 'next/link'
+import { useTranslations } from 'next-intl'
 import type { ReactNode } from 'react'
 
 import { Paw } from '@/assets/icons/paw'
 import AdminIcon from '@/components/admin-icon'
 import { Button } from '@/components/ui/button'
 import { Eyebrow } from '@/components/ui/eyebrow'
+import { Link } from '@/i18n/navigation'
 
 const adminNavItemVariants = cva(
   'grid min-h-11.5 grid-cols-[24px_1fr_auto] items-center gap-2.75 rounded-xl px-3.25 text-[13px] font-black [transition:background_0.2s_ease,color_0.2s_ease,transform_0.2s_ease] hover:transform-[translateX(2px)] tablet:min-w-max tablet:grid-cols-[21px_auto_auto] phone:min-h-10 phone:px-2.5 phone:text-[11px] [&_svg]:size-5.25',
@@ -36,6 +37,7 @@ export function AdminSidebar({
   pendingCount: number
   onSignOut: () => void
 }) {
+  const t = useTranslations('AdminSidebar')
   return (
     <aside className="sticky top-0 z-20 flex h-screen flex-col bg-surface-admin-sidebar px-5 pt-6.75 pb-5.5 text-card tablet:relative tablet:grid tablet:h-auto tablet:grid-cols-[auto_1fr_auto] tablet:items-center tablet:gap-5 tablet:px-5 tablet:py-4 phone:grid-cols-[1fr_auto] phone:gap-2.5 phone:p-3.5">
       <Link
@@ -49,19 +51,19 @@ export function AdminSidebar({
         <span>Croquetón</span>
       </Link>
       <div className="mx-2 mt-4 mb-7.5 w-max rounded-pill border border-[#5c6272] px-2.5 py-1.25 text-micro font-black tracking-[0.14em] text-brand uppercase tablet:hidden">
-        Administrador
+        {t('administrator')}
       </div>
       <nav
         className="grid gap-1.75 tablet:flex tablet:justify-center tablet:overflow-x-auto phone:order-3 phone:col-span-full phone:row-2 phone:justify-start"
-        aria-label="Navegación del panel"
+        aria-label={t('panelNavigation')}
       >
         <a className={adminNavItemVariants({ active: true })} href="#resumen">
           <AdminIcon type="heart" />
-          <span>Resumen</span>
+          <span>{t('overview')}</span>
         </a>
         <a className={adminNavItemVariants()} href="#moderacion">
           <AdminIcon type="review" />
-          <span>Moderación</span>
+          <span>{t('moderation')}</span>
           {pendingCount > 0 && (
             <strong className="grid size-5.75 min-w-5.75 place-items-center rounded-circle bg-accent text-tiny text-white">
               {pendingCount}
@@ -70,11 +72,11 @@ export function AdminSidebar({
         </a>
         <a className={adminNavItemVariants()} href="#comunidad">
           <AdminIcon type="posts" />
-          <span>Comunidad</span>
+          <span>{t('community')}</span>
         </a>
         <Link href="/guaubook" className={adminNavItemVariants({ hideOnPhone: true })}>
           <AdminIcon type="users" />
-          <span>Ver GuauBook</span>
+          <span>{t('viewGuauBook')}</span>
         </Link>
       </nav>
       <div className="mt-auto grid grid-cols-[39px_minmax(0,1fr)] items-center gap-2.5 border-t border-[#3c4152] px-2 py-4 tablet:hidden">
@@ -83,7 +85,7 @@ export function AdminSidebar({
         </span>
         <div>
           <strong className="block overflow-hidden text-[12px] text-ellipsis whitespace-nowrap">
-            Admin Croquetón
+            {t('adminCroqueton')}
           </strong>
           <small className="mt-0.5 block overflow-hidden text-micro font-bold text-ellipsis whitespace-nowrap text-[#959aa8]">
             {userEmail}
@@ -95,7 +97,7 @@ export function AdminSidebar({
         className="px-2 py-2.5 text-left text-[11px] text-[#f19a89] tablet:text-right phone:col-2 phone:row-1 phone:text-[10px]"
         onClick={onSignOut}
       >
-        Cerrar sesión
+        {t('signOut')}
       </Button>
     </aside>
   )
