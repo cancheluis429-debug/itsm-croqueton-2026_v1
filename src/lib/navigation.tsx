@@ -1,7 +1,8 @@
 'use client'
 
-import { usePathname, useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
+
+import { usePathname, useRouter } from '@/i18n/navigation'
 
 export function useLocation() {
   const pathname = usePathname()
