@@ -1,5 +1,6 @@
 'use client'
 
+import { useLocale } from 'next-intl'
 import {
   createContext,
   use,
@@ -7,10 +8,9 @@ import {
   useEffect,
   useMemo,
   useState,
+  useSyncExternalStore,
   type ReactNode
 } from 'react'
-
-import { useLanguage } from '@/providers/language-provider'
 
 export interface CommunityUser {
   email: string
@@ -65,9 +65,14 @@ interface CommunityContextValue {
 }
 
 const CommunityContext = createContext<CommunityContextValue | null>(null)
+const subscribe = () => () => {}
+const clientSnapshot = () => true
+const serverSnapshot = () => false
 
 export function CommunityProvider({ children }: { children: ReactNode }) {
-  const { language } = useLanguage()
+  const language = useLocale()
+  const hydrated = useSyncExternalStore(subscribe, clientSnapshot, serverSnapshot)
+  const [initialized, setInitialized] = useState(false)
   const [user, setUser] = useState<CommunityUser | null>(null)
   const [accounts, setAccounts] = useState<Record<string, string>>({
     'admin@croqueton.mx': 'croqueton2026'
@@ -76,7 +81,7 @@ export function CommunityProvider({ children }: { children: ReactNode }) {
   const [posts, setPosts] = useState<CommunityPost[]>([])
   const [postReviewRequests, setPostReviewRequests] = useState<PostReviewRequest[]>([])
 
-  useEffect(() => {
+  if (hydrated && !initialized) {
     const savedUser = window.localStorage.getItem('croqueton-user')
     if (savedUser) setUser(JSON.parse(savedUser))
 
@@ -91,30 +96,36 @@ export function CommunityProvider({ children }: { children: ReactNode }) {
 
     const savedRequests = window.localStorage.getItem('croqueton-post-review-requests')
     if (savedRequests) setPostReviewRequests(JSON.parse(savedRequests))
-  }, [])
+    setInitialized(true)
+  }
 
   useEffect(() => {
+    if (!initialized) return
     window.localStorage.setItem('croqueton-user', JSON.stringify(user))
-  }, [user])
+  }, [initialized, user])
 
   useEffect(() => {
+    if (!initialized) return
     window.localStorage.setItem('croqueton-accounts', JSON.stringify(accounts))
-  }, [accounts])
+  }, [accounts, initialized])
 
   useEffect(() => {
+    if (!initialized) return
     window.localStorage.setItem('croqueton-pet-color', petFurColor)
-  }, [petFurColor])
+  }, [initialized, petFurColor])
 
   useEffect(() => {
+    if (!initialized) return
     window.localStorage.setItem('croqueton-posts', JSON.stringify(posts))
-  }, [posts])
+  }, [initialized, posts])
 
   useEffect(() => {
+    if (!initialized) return
     window.localStorage.setItem(
       'croqueton-post-review-requests',
       JSON.stringify(postReviewRequests)
     )
-  }, [postReviewRequests])
+  }, [initialized, postReviewRequests])
 
   const formatDate = useCallback(
     () =>
