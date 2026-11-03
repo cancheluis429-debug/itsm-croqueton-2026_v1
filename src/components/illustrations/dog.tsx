@@ -1,4 +1,7 @@
+import { useTranslations } from 'next-intl'
+
 function Dog({ mood = 'cool', className = '' }) {
+  const t = useTranslations('Dog')
   const sad = mood === 'sad' || mood === 'sick'
   const strong = mood === 'strong'
   return (
@@ -6,7 +9,7 @@ function Dog({ mood = 'cool', className = '' }) {
       viewBox="0 0 520 520"
       className={className}
       role="img"
-      aria-label={`Perrito ${strong ? 'fuerte y feliz' : sad ? 'triste' : 'feliz'}`}
+      aria-label={strong ? t('strong') : sad ? t('sad') : t('happy')}
     >
       <g className="dog-shadow">
         <ellipse cx="262" cy="466" rx="142" ry="28" fill="#202436" opacity=".16" />
