@@ -1,6 +1,7 @@
 'use client'
 
 import { cn } from 'cn'
+import { useTranslations } from 'next-intl'
 import Image from 'next/image'
 import { useState, type FormEvent } from 'react'
 
@@ -21,13 +22,12 @@ import { heroDogImage, rejectedApplicationImage } from '@/lib/images'
 
 export function JoinApplicationDialog({
   open,
-  onOpenChange,
-  isEnglish
+  onOpenChange
 }: {
   open: boolean
   onOpenChange: (open: boolean) => void
-  isEnglish: boolean
 }) {
+  const t = useTranslations('JoinApplicationDialog')
   const [joinResult, setJoinResult] = useState<'requirements' | 'welcome' | null>(null)
   const [applicantName, setApplicantName] = useState('')
   const [applicantAge, setApplicantAge] = useState('')
@@ -64,39 +64,35 @@ export function JoinApplicationDialog({
       <DialogPortal>
         <DialogViewport>
           <DialogPopup>
-            <DialogClose aria-label={isEnglish ? 'Close form' : 'Cerrar formulario'} />
+            <DialogClose aria-label={t('closeForm')} />
             {!joinResult ? (
               <>
                 <Eyebrow variant="section" tone="accent">
-                  {isEnglish ? 'Official pack application' : 'Solicitud oficial de la manada'}
+                  {t('officialPackApplication')}
                 </Eyebrow>
                 <DialogTitle id="join-dialog-title">
-                  {isEnglish ? "Let's sniff out" : 'Vamos a olfatear'}
+                  {t('letSSniffOut')}
                   <br />
-                  {isEnglish ? 'your profile.' : 'tu perfil.'}
+                  {t('yourProfile')}
                 </DialogTitle>
                 <DialogDescription>
-                  {isEnglish
-                    ? 'Complete the checklist. Chispita takes recruitment very seriously for about six seconds.'
-                    : 'Completa la lista. Chispita se toma el reclutamiento muy en serio durante unos seis segundos.'}
+                  {t('completeTheChecklistChispitaTakesRecruitmentVerySeriously')}
                 </DialogDescription>
                 <form
                   className="mt-7 grid grid-cols-[1fr_1fr] gap-4.25 phone:grid-cols-[1fr]"
                   onSubmit={submitJoinForm}
                 >
                   <FieldLabel>
-                    <span>{isEnglish ? 'Your name' : 'Tu nombre'}</span>
+                    <span>{t('yourName')}</span>
                     <TextInput
                       value={applicantName}
                       onChange={(event) => setApplicantName(event.target.value)}
                       maxLength={40}
-                      placeholder={
-                        isEnglish ? 'Human or heroic nickname' : 'Nombre humano o apodo heroico'
-                      }
+                      placeholder={t('humanOrHeroicNickname')}
                     />
                   </FieldLabel>
                   <FieldLabel>
-                    <span>{isEnglish ? 'Your age' : 'Tu edad'}</span>
+                    <span>{t('yourAge')}</span>
                     <TextInput
                       type="number"
                       min="0"
@@ -107,54 +103,37 @@ export function JoinApplicationDialog({
                     />
                   </FieldLabel>
                   <FieldLabel className="col-span-full phone:col-1">
-                    <span>
-                      {isEnglish
-                        ? 'Why do you want to participate?'
-                        : '\xBFPor qu\xE9 quieres participar?'}
-                    </span>
+                    <span>{t('whyDoYouWantToParticipate')}</span>
                     <TextareaInput
                       value={motivation}
                       onChange={(event) => setMotivation(event.target.value)}
                       maxLength={400}
-                      placeholder={
-                        isEnglish
-                          ? 'Tell the pack what motivates you to help\u2026'
-                          : 'Cu\xE9ntale a la manada qu\xE9 te motiva a ayudar\u2026'
-                      }
+                      placeholder={t('tellThePackWhatMotivatesYouToHelp')}
                     />
                     <small className="text-tiny tracking-normal normal-case opacity-62">
-                      {isEnglish ? 'Minimum 20 characters.' : 'M\xEDnimo 20 caracteres.'}
+                      {t('minimum20Characters')}
                     </small>
                   </FieldLabel>
                   <CheckboxCard
                     checked={hasAvailability}
                     onChange={(event) => setHasAvailability(event.target.checked)}
                   >
-                    {isEnglish
-                      ? 'I am available on event day.'
-                      : 'Tengo disponibilidad el d\xEDa del evento.'}
+                    {t('iAmAvailableOnEventDay')}
                   </CheckboxCard>
                   <CheckboxCard
                     checked={acceptsCommitment}
                     onChange={(event) => setAcceptsCommitment(event.target.checked)}
                   >
-                    {isEnglish
-                      ? 'I agree to work as a team and follow care guidelines.'
-                      : 'Acepto trabajar en equipo y seguir las indicaciones de cuidado.'}
+                    {t('iAgreeToWorkAsATeamAnd')}
                   </CheckboxCard>
-                  <NoteCallout
-                    tone="secondary"
-                    title={isEnglish ? "Chispita's checklist" : 'Lista de Chispita'}
-                  >
-                    {isEnglish
-                      ? '18+ \xB7 A clear motivation \xB7 Availability \xB7 Team commitment'
-                      : '18+ \xB7 Una motivaci\xF3n clara \xB7 Disponibilidad \xB7 Compromiso'}
+                  <NoteCallout tone="secondary" title={t('chispitaSChecklist')}>
+                    {t('text18AClearMotivationAvailabilityTeamCommitment')}
                   </NoteCallout>
                   <Button
                     type="submit"
                     className="col-span-full mt-1.25 w-max phone:col-1 phone:w-full"
                   >
-                    {isEnglish ? 'Check my application' : 'Revisar mi solicitud'}
+                    {t('checkMyApplication')}
                   </Button>
                 </form>
               </>
@@ -170,49 +149,25 @@ export function JoinApplicationDialog({
                   )}
                   alt={
                     joinResult === 'welcome'
-                      ? isEnglish
-                        ? 'Happy dog welcoming the new volunteer'
-                        : 'Perrito feliz dando la bienvenida al nuevo voluntario'
-                      : isEnglish
-                        ? 'Laughing dog reacting to the application'
-                        : 'Perrito ri\xE9ndose de la solicitud'
+                      ? t('happyDogWelcomingTheNewVolunteer')
+                      : t('laughingDogReactingToTheApplication')
                   }
                 />
                 <Eyebrow variant="section" tone="accent">
-                  {joinResult === 'welcome'
-                    ? isEnglish
-                      ? 'Registration complete'
-                      : 'Registro completado'
-                    : isEnglish
-                      ? 'Almost, human'
-                      : 'Casi, humano'}
+                  {joinResult === 'welcome' ? t('registrationComplete') : t('almostHuman')}
                 </Eyebrow>
                 <DialogTitle id="join-dialog-title">
                   {joinResult === 'welcome'
-                    ? isEnglish
-                      ? `Thank you for joining, ${applicantName.trim()}!`
-                      : `\xA1Gracias por registrarte, ${applicantName.trim()}!`
-                    : isEnglish
-                      ? 'Your checklist needs work.'
-                      : 'Te faltaron unas casillas.'}
+                    ? t('welcomeApplicant', { name: applicantName.trim() })
+                    : t('yourChecklistNeedsWork')}
                 </DialogTitle>
                 <DialogDescription>
                   {joinResult === 'welcome'
-                    ? isEnglish
-                      ? 'Your time and motivation can fill many bowls. The pack received your registration and will contact you to confirm the next steps.'
-                      : 'Tu tiempo y tu motivaci\xF3n pueden llenar muchos platos. La manada recibi\xF3 tu registro y se pondr\xE1 en contacto contigo para confirmar los siguientes pasos.'
-                    : isEnglish
-                      ? 'You need to be 18+, explain your motivation in at least 20 characters, be available and ready to work as a team. The dog is laughing with you, not at you. Probably.'
-                      : 'Necesitas ser mayor de edad, explicar tu motivaci\xF3n en al menos 20 caracteres, tener disponibilidad y aceptar el trabajo en equipo. El perrito se r\xEDe contigo, no de ti. Probablemente.'}
+                    ? t('yourTimeAndMotivationCanFillManyBowls')
+                    : t('youNeedToBe18ExplainYourMotivation')}
                 </DialogDescription>
                 <Button className="mt-3" onClick={() => setJoinResult(null)}>
-                  {joinResult === 'welcome'
-                    ? isEnglish
-                      ? 'Review my answers'
-                      : 'Revisar mis respuestas'
-                    : isEnglish
-                      ? 'Complete the form'
-                      : 'Completar el formulario'}
+                  {joinResult === 'welcome' ? t('reviewMyAnswers') : t('completeTheForm')}
                 </Button>
               </div>
             )}
