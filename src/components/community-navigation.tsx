@@ -1,16 +1,15 @@
-import Link from 'next/link'
+import { useTranslations } from 'next-intl'
 
 import { Paw } from '@/assets/icons/paw'
+import { Link } from '@/i18n/navigation'
 import { useNavigate } from '@/lib/navigation'
 import { useCommunity } from '@/providers/community-provider'
-import { useLanguage } from '@/providers/language-provider'
 
 function CommunityNavigation() {
-  const { language } = useLanguage()
+  const t = useTranslations('CommunityNavigation')
+
   const { user, signOut } = useCommunity()
   const navigate = useNavigate()
-
-  const isEnglish = language === 'en'
 
   return (
     <>
@@ -27,26 +26,26 @@ function CommunityNavigation() {
             <span>Croquetón</span>
           </Link>
           <nav
-            aria-label={isEnglish ? 'Community navigation' : 'Navegaci\xF3n de la comunidad'}
+            aria-label={t('communityNavigation')}
             className="flex flex-1 justify-center gap-6 font-black phone:order-3 phone:basis-full phone:justify-start phone:overflow-x-auto phone:pb-0.75"
           >
             <Link
               href="/guaubook"
               className="border-b-3 border-transparent hover:border-current phone:flex-none phone:text-[12px]"
             >
-              {isEnglish ? 'GuauBook' : 'GuauBook'}
+              {t('guauBook')}
             </Link>
             <Link
               href="/mi-perfil"
               className="border-b-3 border-transparent hover:border-current phone:flex-none phone:text-[12px]"
             >
-              {isEnglish ? 'My profile' : 'Mi perfil'}
+              {t('myProfile')}
             </Link>
             <Link
               href="/avatar-mascota"
               className="border-b-3 border-transparent hover:border-current phone:flex-none phone:text-[12px]"
             >
-              {isEnglish ? 'Avatar & pet' : 'Avatar y mascota'}
+              {t('avatarPet')}
             </Link>
           </nav>
           {user && (
@@ -58,7 +57,7 @@ function CommunityNavigation() {
                 navigate('/')
               }}
             >
-              {isEnglish ? 'Sign out' : 'Cerrar sesi\xF3n'}
+              {t('signOut')}
             </button>
           )}
         </div>
