@@ -1,5 +1,6 @@
 'use client'
 
+import { useTranslations } from 'next-intl'
 import Image from 'next/image'
 
 import { Paw } from '@/assets/icons/paw'
@@ -9,12 +10,9 @@ import { PageShell } from '@/components/page-shell'
 import { SectionIntro } from '@/components/section-intro'
 import { Container } from '@/components/ui/container'
 import { packGenerationImage } from '@/lib/images'
-import { useLanguage } from '@/providers/language-provider'
 
 export default function PackPage() {
-  const { language } = useLanguage()
-
-  const isEnglish = language === 'en'
+  const t = useTranslations('PackPage')
 
   return (
     <PageShell surface="mint">
@@ -22,14 +20,10 @@ export default function PackPage() {
         surface="soft"
         spacing="compact"
         className="relative overflow-hidden"
-        eyebrow={isEnglish ? 'The Croquet\xF3n pack' : 'La manada Croquet\xF3n'}
-        title={isEnglish ? 'Every generation' : 'Cada generaci\xF3n'}
-        accentTitle={isEnglish ? 'leaves paw prints.' : 'deja huellitas.'}
-        description={
-          isEnglish
-            ? 'Our group album keeps the volunteers, laughs and heroic kibble-carrying poses from every edition.'
-            : 'Nuestro \xE1lbum grupal guarda a los voluntarios, las risas y las poses heroicas cargando croquetas de cada edici\xF3n.'
-        }
+        eyebrow={t('theCroquetonPack')}
+        title={t('everyGeneration')}
+        accentTitle={t('leavesPawPrints')}
+        description={t('ourGroupAlbumKeepsTheVolunteersLaughsAnd')}
         descriptionClassName="max-w-175"
         backdrop={
           <div
@@ -55,38 +49,28 @@ export default function PackPage() {
         <Container>
           <SectionIntro
             className="max-w-180"
-            eyebrow={isEnglish ? 'Croquet\xF3n generations' : 'Generaciones Croquet\xF3n'}
+            eyebrow={t('croquetonGenerations')}
             titleId="pack-gallery-title"
             title={
               <>
-                {isEnglish ? "The pack's" : 'El \xE1lbum de'}
+                {t('thePackS')}
                 <br />
-                {isEnglish ? 'group album.' : 'la manada.'}
+                {t('groupAlbum')}
               </>
             }
-            description={
-              isEnglish
-                ? "A home for each generation's official group photo, published by the Croquet\xF3n team."
-                : 'Un espacio para la foto grupal oficial de cada generaci\xF3n, publicada por el equipo Croquet\xF3n.'
-            }
+            description={t('aHomeForEachGenerationSOfficialGroup')}
           />
           <div className="mt-11.25 grid grid-cols-[1.2fr_0.9fr_0.9fr] gap-5.5 tablet:grid-cols-[1fr]">
             <figure className="-rotate-1 overflow-hidden rounded-3xl bg-card text-ink shadow-card">
               <Image
                 src={packGenerationImage}
                 className="block aspect-[1.35] w-full object-cover"
-                alt={
-                  isEnglish
-                    ? 'Croquet\xF3n 2025 team posing with donated pet food'
-                    : 'Equipo Croquet\xF3n 2025 posando con alimento donado para mascotas'
-                }
+                alt={t('croqueton2025TeamPosingWithDonatedPetFood')}
               />
               <figcaption className="px-5 py-4.5">
-                <strong className="block font-heading text-lead-lg">
-                  {isEnglish ? 'Generation 2025' : 'Generaci\xF3n 2025'}
-                </strong>
+                <strong className="block font-heading text-lead-lg">{t('generation2025')}</strong>
                 <span className="block text-[12px] font-extrabold opacity-60">
-                  {isEnglish ? 'The founding pack' : 'La manada fundadora'}
+                  {t('theFoundingPack')}
                 </span>
               </figcaption>
             </figure>
@@ -94,23 +78,15 @@ export default function PackPage() {
               variant="generation"
               className="rotate-1"
               iconClassName="text-secondary"
-              title={isEnglish ? 'Next group photo' : 'Pr\xF3xima foto grupal'}
-              description={
-                isEnglish
-                  ? 'Reserved for the next generation of Croquetones.'
-                  : 'Reservado para la siguiente generaci\xF3n de Croquetones.'
-              }
+              title={t('nextGroupPhoto')}
+              description={t('reservedForTheNextGenerationOfCroquetones')}
             />
             <EmptyStateCard
               variant="generation"
               className="rotate-[-1.5deg]"
               iconClassName="text-accent"
-              title={isEnglish ? 'Your team could be here' : 'Aqu\xED puede estar tu equipo'}
-              description={
-                isEnglish
-                  ? 'Join, help and smile for the camera.'
-                  : '\xDAnete, ayuda y sonr\xEDe para la foto.'
-              }
+              title={t('yourTeamCouldBeHere')}
+              description={t('joinHelpAndSmileForTheCamera')}
             />
           </div>
         </Container>
