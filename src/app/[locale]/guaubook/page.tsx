@@ -1,7 +1,7 @@
 'use client'
 
+import { useTranslations } from 'next-intl'
 import Image from 'next/image'
-import Link from 'next/link'
 import { useState, type FormEvent } from 'react'
 
 import { Paw } from '@/assets/icons/paw'
@@ -13,18 +13,17 @@ import { Button } from '@/components/ui/button'
 import { Container } from '@/components/ui/container'
 import { Eyebrow } from '@/components/ui/eyebrow'
 import { FieldLabel, TextareaInput } from '@/components/ui/field'
+import { Link } from '@/i18n/navigation'
 import { assessPostRelevance } from '@/lib/content'
 import { useCommunity } from '@/providers/community-provider'
-import { useLanguage } from '@/providers/language-provider'
 
 export default function GuauBookPage() {
-  const { language } = useLanguage()
+  const t = useTranslations('GuauBookPage')
+
   const { user, posts, addPost, requestPostReview } = useCommunity()
   const [body, setBody] = useState('')
   const [image, setImage] = useState<string>()
   const [notice, setNotice] = useState('')
-
-  const isEnglish = language === 'en'
 
   const handleSelectPostImage = (file: File | undefined) => {
     if (!file) return
@@ -44,30 +43,20 @@ export default function GuauBookPage() {
 
     const relevance = assessPostRelevance(body.trim(), !!image)
     if (relevance === 'blocked') {
-      setNotice(
-        isEnglish
-          ? 'This post does not appear to be related to pets or animal care, so it was not published.'
-          : 'Esta publicaci\xF3n no parece estar relacionada con mascotas o cuidado animal, por eso no se public\xF3.'
-      )
+      setNotice(t('thisPostDoesNotAppearToBeRelated'))
       return
     }
 
     if (relevance === 'review') {
       requestPostReview(body.trim())
-      setNotice(
-        isEnglish
-          ? 'We could not confirm the topic. Add details such as dog, cat, pet, adoption or animal care, or wait for review.'
-          : 'No pudimos confirmar el tema. A\xF1ade detalles como perro, gato, mascota, adopci\xF3n o cuidado animal, o espera la revisi\xF3n.'
-      )
+      setNotice(t('weCouldNotConfirmTheTopicAddDetails'))
       return
     }
 
     addPost(body.trim(), image)
     setBody('')
     setImage(void 0)
-    setNotice(
-      isEnglish ? 'Your post is now in GuauBook.' : 'Tu publicaci\xF3n ya est\xE1 en GuauBook.'
-    )
+    setNotice(t('yourPostIsNowInGuauBook'))
   }
 
   return (
@@ -76,14 +65,10 @@ export default function GuauBookPage() {
         surface="soft"
         spacing="guaubook"
         eyebrow="GuauBook"
-        title={isEnglish ? 'Stories from' : 'Historias de'}
-        accentTitle={isEnglish ? 'the pack.' : 'la manada.'}
+        title={t('storiesFrom')}
+        accentTitle={t('thePack')}
         titleClassName="mt-2.75 mb-5 text-[clamp(64px,7vw,104px)] leading-[0.8] font-normal phone:text-[56px]"
-        description={
-          isEnglish
-            ? 'Share a moment, a photo or a little good news with the Croquet\xF3n community.'
-            : 'Comparte un momento, una foto o una buena noticia con la comunidad Croquet\xF3n.'
-        }
+        description={t('shareAMomentAPhotoOrALittle')}
         descriptionClassName="m-0 text-[18px] leading-[1.55]"
       />
       <Container
@@ -95,26 +80,22 @@ export default function GuauBookPage() {
             className="sticky top-31.5 grid gap-3.75 rounded-3xl border-4 border-ink bg-card p-6.25 shadow-card tablet:relative tablet:top-0 phone:p-4.75"
             onSubmit={handlePublish}
           >
-            <FieldLabel htmlFor="post-body">
-              {isEnglish ? 'What do you want to share?' : '\xBFQu\xE9 quieres compartir?'}
-            </FieldLabel>
+            <FieldLabel htmlFor="post-body">{t('whatDoYouWantToShare')}</FieldLabel>
             <TextareaInput
               id="post-body"
               variant="control"
               value={body}
               onChange={(event) => setBody(event.target.value)}
-              placeholder={isEnglish ? 'Write something kind\u2026' : 'Escribe algo bonito\u2026'}
+              placeholder={t('writeSomethingKind')}
             />
             <small className="-mt-1.75 block text-[12px] leading-label font-extrabold text-[#526165]">
-              {isEnglish
-                ? 'Please share pets, care, food, animal health, adoption or experiences with animals.'
-                : 'Comparte sobre mascotas, cuidados, alimentaci\xF3n, salud animal, adopci\xF3n o experiencias con animales.'}
+              {t('pleaseSharePetsCareFoodAnimalHealthAdoption')}
             </small>
             {image && (
               <Image
                 className="block max-h-90 w-full rounded-control object-cover"
                 src={image}
-                alt={isEnglish ? 'Selected post preview' : 'Vista previa de la foto seleccionada'}
+                alt={t('selectedPostPreview')}
               />
             )}
             <div className="flex items-center justify-between gap-3">
@@ -125,10 +106,10 @@ export default function GuauBookPage() {
                   accept="image/*"
                   onChange={(event) => handleSelectPostImage(event.target.files?.[0])}
                 />
-                {isEnglish ? 'Add photo' : 'A\xF1adir foto'}
+                {t('addPhoto')}
               </label>
               <Button size="sm" type="submit">
-                {isEnglish ? 'Publish' : 'Publicar'}
+                {t('publish')}
               </Button>
             </div>
             <small
@@ -141,31 +122,19 @@ export default function GuauBookPage() {
         ) : (
           <aside className="sticky top-31.5 grid justify-items-start gap-3.25 rounded-3xl border-4 border-ink bg-card p-6.75 text-ink shadow-card tablet:relative tablet:top-0 phone:p-4.75">
             <Paw className="w-13.5 text-accent" />
-            <Eyebrow>{isEnglish ? 'Your profile' : 'Tu perfil'}</Eyebrow>
-            <h2 className="m-0 min-[541px]:text-[42px]">
-              {isEnglish ? 'Join the conversation.' : '\xDAnete a la conversaci\xF3n.'}
-            </h2>
+            <Eyebrow>{t('yourProfile')}</Eyebrow>
+            <h2 className="m-0 min-[541px]:text-[42px]">{t('joinTheConversation')}</h2>
             <p className="mb-2 leading-normal font-extrabold">
-              {isEnglish
-                ? "Everyone can read the pack's stories. Create an account or sign in to publish, love and comment."
-                : 'Todos pueden leer las historias de la manada. Crea una cuenta o inicia sesi\xF3n para publicar, dar Me encanta y comentar.'}
+              {t('everyoneCanReadThePackSStoriesCreate')}
             </p>
-            <Button render={<Link href="/iniciar-sesion" />}>
-              {isEnglish ? 'Join or sign in' : 'Unirme o iniciar sesi\xF3n'}
-            </Button>
+            <Button render={<Link href="/iniciar-sesion" />}>{t('joinOrSignIn')}</Button>
           </aside>
         )}
         <div className="grid gap-5" aria-live="polite">
           {posts.length ? (
             posts.map((post) => <PostCard key={post.id} post={post} />)
           ) : (
-            <EmptyStateCard
-              title={
-                isEnglish
-                  ? "The pack's first story will appear here."
-                  : 'Aqu\xED aparecer\xE1 la primera publicaci\xF3n de la manada.'
-              }
-            />
+            <EmptyStateCard title={t('thePackSFirstStoryWillAppearHere')} />
           )}
         </div>
       </Container>
