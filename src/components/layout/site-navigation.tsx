@@ -1,7 +1,7 @@
 'use client'
 
 import { cn } from 'cn'
-import Link from 'next/link'
+import { useTranslations } from 'next-intl'
 import { useEffect, useRef, useState } from 'react'
 
 import { Close } from '@/assets/icons/close'
@@ -9,9 +9,9 @@ import { Menu } from '@/assets/icons/menu'
 import { Paw } from '@/assets/icons/paw'
 import { User } from '@/assets/icons/user'
 import { Logo } from '@/components/layout/logo'
+import { Link } from '@/i18n/navigation'
 import { useLocation } from '@/lib/navigation'
 import { useCommunity } from '@/providers/community-provider'
-import { useLanguage } from '@/providers/language-provider'
 
 function SiteNavigation({
   home = false,
@@ -20,41 +20,37 @@ function SiteNavigation({
   home?: boolean
   isScrolled?: boolean
 }) {
-  const { language } = useLanguage()
+  const t = useTranslations('Navigation')
+
   const { user } = useCommunity()
   const location = useLocation()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const navigationRef = useRef<HTMLElement>(null)
 
-  const isEnglish = language === 'en'
   const navigationItems = [
     {
       to: '/#historia',
-      label: isEnglish ? 'Story' : 'Historia',
+      label: t('story'),
       active: location.pathname === '/'
     },
-    { to: '/meta', label: isEnglish ? 'Goal' : 'Meta', active: location.pathname === '/meta' },
+    { to: '/meta', label: t('goal'), active: location.pathname === '/meta' },
     { to: '/guaubook', label: 'GuauBook', active: location.pathname === '/guaubook' },
     {
       to: '/unirme',
-      label: isEnglish ? 'Join us' : 'Unirme',
+      label: t('join'),
       active: location.pathname === '/unirme'
     },
     {
       to: '/donadores',
-      label: isEnglish ? 'Donors' : 'Donadores',
+      label: t('donors'),
       active: location.pathname === '/donadores'
     },
     {
       to: '/manada',
-      label: isEnglish ? 'The Croquetones' : 'Los Croquetones',
+      label: t('pack'),
       active: location.pathname === '/manada'
     }
   ]
-
-  useEffect(() => {
-    setIsMenuOpen(false)
-  }, [location.pathname, location.hash])
 
   useEffect(() => {
     if (!isMenuOpen) return
@@ -94,7 +90,7 @@ function SiteNavigation({
               ? 'h-19.5 gap-7 tablet:h-auto tablet:min-h-19.5 tablet:gap-3 tablet:py-2.5'
               : 'h-26 gap-7 tablet:h-auto tablet:min-h-20.5 tablet:gap-3 tablet:py-3.25'
           )}
-          aria-label={isEnglish ? 'Main navigation' : 'Navegaci\xF3n principal'}
+          aria-label={t('mainNavigation')}
         >
           {home ? (
             <Logo />
@@ -102,7 +98,7 @@ function SiteNavigation({
             <Link
               href="/"
               className="logo inline-flex w-max items-center gap-2.5 font-heading text-title-sm font-extrabold tracking-heading"
-              aria-label={isEnglish ? 'Back to Croquet\xF3n' : 'Volver a Croquet\xF3n'}
+              aria-label={t('backToCroqueton')}
             >
               <span className="logo-mark grid size-10.75 place-items-center rounded-circle bg-surface-inverse text-fg-control-active [&_svg]:size-6.25">
                 <Paw />
@@ -141,15 +137,7 @@ function SiteNavigation({
             <button
               className="mobile-menu-button hidden size-11.5 flex-none place-items-center rounded-field border-3 border-stroke bg-surface-menu-button p-0 text-fg-control shadow-icon-button in-data-[theme='dark']:shadow-icon-button! tablet:grid [&_svg]:size-6.25"
               type="button"
-              aria-label={
-                isMenuOpen
-                  ? isEnglish
-                    ? 'Close menu'
-                    : 'Cerrar men\xFA'
-                  : isEnglish
-                    ? 'Open menu'
-                    : 'Abrir men\xFA'
-              }
+              aria-label={isMenuOpen ? t('closeMenu') : t('openMenu')}
               aria-expanded={isMenuOpen}
               aria-controls="mobile-navigation-menu"
               onClick={() => setIsMenuOpen((open) => !open)}
@@ -169,24 +157,8 @@ function SiteNavigation({
                   ? 'page'
                   : void 0
               }
-              aria-label={
-                user
-                  ? isEnglish
-                    ? 'My profile'
-                    : 'Mi perfil'
-                  : isEnglish
-                    ? 'User sign in'
-                    : 'Iniciar sesi\xF3n de usuario'
-              }
-              title={
-                user
-                  ? isEnglish
-                    ? 'My profile'
-                    : 'Mi perfil'
-                  : isEnglish
-                    ? 'Sign in'
-                    : 'Iniciar sesi\xF3n'
-              }
+              aria-label={user ? t('myProfile') : t('userSignIn')}
+              title={user ? t('myProfile') : t('signIn')}
             >
               <User />
             </Link>
