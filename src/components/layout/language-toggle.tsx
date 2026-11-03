@@ -1,16 +1,20 @@
 'use client'
 
+import { useLocale, useTranslations } from 'next-intl'
 import { useEffect, useRef, useState } from 'react'
 
 import { ChevronDown } from '@/assets/icons/chevron-down'
-import { useLanguage, type Language } from '@/providers/language-provider'
+import { usePathname, useRouter } from '@/i18n/navigation'
 
 function LanguageToggle() {
-  const { language, setLanguage } = useLanguage()
+  const language = useLocale()
+  const t = useTranslations('LanguageToggle')
+  const pathname = usePathname()
+  const router = useRouter()
   const [isOpen, setIsOpen] = useState(false)
   const menuRef = useRef<HTMLDivElement>(null)
 
-  const languageLabels: Record<Language, string> = {
+  const languageLabels = {
     es: 'ES',
     en: 'EN',
     yua: 'YUA'
@@ -33,8 +37,8 @@ function LanguageToggle() {
     }
   }, [])
 
-  function selectLanguage(nextLanguage: Language) {
-    setLanguage(nextLanguage)
+  function selectLanguage(nextLanguage: 'es' | 'en' | 'yua') {
+    router.replace(pathname, { locale: nextLanguage })
     setIsOpen(false)
   }
 
@@ -48,9 +52,9 @@ function LanguageToggle() {
           id="language-options"
           className="absolute right-0 bottom-[calc(100%+12px)] grid gap-2"
           role="menu"
-          aria-label="Idioma · Language · Maaya t'aan"
+          aria-label={t('languageMenu')}
         >
-          {(Object.keys(languageLabels) as Language[]).map((option) => (
+          {(['es', 'en', 'yua'] as const).map((option) => (
             <button
               key={option}
               type="button"
@@ -67,12 +71,12 @@ function LanguageToggle() {
       <button
         className="language-trigger flex h-11.5 w-16 items-center justify-center gap-1.25 rounded-pill border-3 border-stroke bg-surface-floating p-0 text-caption font-black text-fg-control shadow-chip [transition:background_0.2s_ease,color_0.2s_ease,transform_0.2s_ease] hover:transform-[translateY(-2px)] in-data-[theme='dark']:shadow-chip! aria-expanded:transform-[translateY(-2px)] phone:h-10.5 phone:w-14.5 [&_svg]:size-3.5 [&_svg]:[transition:transform_0.2s_ease] aria-expanded:[&_svg]:transform-[rotate(180deg)]"
         type="button"
-        aria-label="Seleccionar idioma"
+        aria-label={t('selectLanguage')}
         aria-expanded={isOpen}
         aria-controls="language-options"
         onClick={() => setIsOpen((open) => !open)}
       >
-        <span>{languageLabels[language]}</span>
+        <span>{languageLabels[language as keyof typeof languageLabels]}</span>
         <ChevronDown />
       </button>
     </div>
