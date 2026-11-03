@@ -1,5 +1,6 @@
 'use client'
 
+import { useTranslations } from 'next-intl'
 import Image from 'next/image'
 import { useState, type FormEvent } from 'react'
 
@@ -10,10 +11,10 @@ import { FieldLabel, TextInput } from '@/components/ui/field'
 import { errorDogImage, packAccessDogImage } from '@/lib/images'
 import { useNavigate } from '@/lib/navigation'
 import { useCommunity } from '@/providers/community-provider'
-import { useLanguage } from '@/providers/language-provider'
 
 export default function LoginPage() {
-  const { language } = useLanguage()
+  const t = useTranslations('LoginPage')
+
   const { signIn, createAccount } = useCommunity()
   const navigate = useNavigate()
   const [isCreatingAccount, setIsCreatingAccount] = useState(false)
@@ -21,8 +22,6 @@ export default function LoginPage() {
   const [password, setPassword] = useState('')
   const [loginMessage, setLoginMessage] = useState('')
   const [loginFailed, setLoginFailed] = useState(false)
-
-  const isEnglish = language === 'en'
 
   const requestAccess = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -35,11 +34,7 @@ export default function LoginPage() {
     }
 
     setLoginFailed(true)
-    setLoginMessage(
-      isEnglish
-        ? 'Wrong password. The dog has already started laughing.'
-        : 'Contrase\xF1a incorrecta. El perrito ya empez\xF3 a re\xEDrse.'
-    )
+    setLoginMessage(t('wrongPasswordTheDogHasAlreadyStartedLaughing'))
   }
 
   const requestAccount = (event: FormEvent<HTMLFormElement>) => {
@@ -51,11 +46,7 @@ export default function LoginPage() {
     }
 
     setLoginFailed(true)
-    setLoginMessage(
-      isEnglish
-        ? 'Use an unused email and a password with at least 6 characters.'
-        : 'Usa un correo que no exista y una contrase\xF1a de al menos 6 caracteres.'
-    )
+    setLoginMessage(t('useAnUnusedEmailAndAPasswordWith'))
   }
 
   return (
@@ -71,53 +62,35 @@ export default function LoginPage() {
           <figure className="m-0 size-20.5 flex-none -rotate-5 overflow-hidden rounded-circle border-3 border-ink bg-white shadow-[4px_5px_0_var(--accent)] phone:size-16.5">
             <Image
               src={packAccessDogImage}
-              alt={isEnglish ? 'Puppy dressed for the pack' : 'Cachorro vestido para la manada'}
+              alt={t('puppyDressedForThePack')}
               className="block size-full object-cover"
             />
           </figure>
           <div className="flex-1">
             <Eyebrow variant="section" tone="accent" className="mb-2.25">
-              {isEnglish ? 'Pack access' : 'Acceso de la manada'}
+              {t('packAccess')}
             </Eyebrow>
             <h1
               id="login-title"
               className="m-0 font-heading text-[clamp(48px,5vw,60px)] leading-[0.86] font-extrabold tracking-heading phone:text-[50px]"
             >
-              {isCreatingAccount
-                ? isEnglish
-                  ? 'Create your'
-                  : 'Crea tu'
-                : isEnglish
-                  ? 'Welcome'
-                  : 'Bienvenido'}
+              {isCreatingAccount ? t('createYour') : t('welcome')}
               <br />
-              <span className="text-accent">
-                {isCreatingAccount
-                  ? isEnglish
-                    ? 'account.'
-                    : 'cuenta.'
-                  : isEnglish
-                    ? 'back.'
-                    : 'de vuelta.'}
-              </span>
+              <span className="text-accent">{isCreatingAccount ? t('account') : t('back')}</span>
             </h1>
           </div>
         </div>
         <p className="leading-normal font-extrabold">
           {isCreatingAccount
-            ? isEnglish
-              ? 'Join GuauBook, customize your profile and share moments with the pack.'
-              : '\xDAnete a GuauBook, personaliza tu perfil y comparte momentos con la manada.'
-            : isEnglish
-              ? 'Enter to see what the Croquet\xF3n pack is sharing.'
-              : 'Entra para ver lo que comparte la manada Croquet\xF3n.'}
+            ? t('joinGuauBookCustomizeYourProfileAndShareMoments')
+            : t('enterToSeeWhatTheCroquetonPackIs')}
         </p>
         <form
           className="mt-7 grid gap-4.5"
           onSubmit={isCreatingAccount ? requestAccount : requestAccess}
         >
           <FieldLabel>
-            <span>{isEnglish ? 'Email' : 'Correo electr\xF3nico'}</span>
+            <span>{t('email')}</span>
             <TextInput
               type="email"
               variant="auth"
@@ -128,7 +101,7 @@ export default function LoginPage() {
             />
           </FieldLabel>
           <FieldLabel>
-            <span>{isEnglish ? 'Password' : 'Contrase\xF1a'}</span>
+            <span>{t('password')}</span>
             <TextInput
               type="password"
               variant="auth"
@@ -140,19 +113,11 @@ export default function LoginPage() {
             />
           </FieldLabel>
           <Button type="submit" className="mt-1 w-full">
-            {isCreatingAccount
-              ? isEnglish
-                ? 'Create my account'
-                : 'Crear mi cuenta'
-              : isEnglish
-                ? 'Sign in'
-                : 'Iniciar sesi\xF3n'}
+            {isCreatingAccount ? t('createMyAccount') : t('signIn')}
           </Button>
           {!isCreatingAccount && (
             <small className="min-h-4.5 rounded-lg bg-surface-warm px-3 py-2.25 text-center font-extrabold text-ink">
-              {isEnglish
-                ? 'Demo: admin@croqueton.mx \xB7 croqueton2026'
-                : 'Demo: admin@croqueton.mx \xB7 croqueton2026'}
+              {t('demoAdminCroquetonMxCroqueton2026')}
             </small>
           )}
           <Button
@@ -164,23 +129,13 @@ export default function LoginPage() {
               setLoginMessage('')
             }}
           >
-            {isCreatingAccount
-              ? isEnglish
-                ? 'I already have an account'
-                : 'Ya tengo una cuenta'
-              : isEnglish
-                ? 'Create my account'
-                : 'Crear mi cuenta'}
+            {isCreatingAccount ? t('iAlreadyHaveAnAccount') : t('createMyAccount')}
           </Button>
           <small aria-live="polite" className="min-h-4.5 font-extrabold opacity-65">
             {loginMessage ||
               (isCreatingAccount
-                ? isEnglish
-                  ? 'Your password must have at least 6 characters.'
-                  : 'Tu contrase\xF1a debe tener al menos 6 caracteres.'
-                : isEnglish
-                  ? 'Use your email and password to continue.'
-                  : 'Usa tu correo y contrase\xF1a para continuar.')}
+                ? t('yourPasswordMustHaveAtLeast6Characters')
+                : t('useYourEmailAndPasswordToContinue'))}
           </small>
         </form>
         {loginFailed && (
@@ -188,14 +143,10 @@ export default function LoginPage() {
             <Image
               src={errorDogImage}
               className="mx-auto block aspect-square w-[min(230px,75%)] -rotate-2 rounded-dialog-sm border-6 border-ink object-cover shadow-[7px_8px_0_var(--accent)]"
-              alt={
-                isEnglish
-                  ? 'Puppy laughing at the wrong password'
-                  : 'Perrito ri\xE9ndose por la contrase\xF1a incorrecta'
-              }
+              alt={t('puppyLaughingAtTheWrongPassword')}
             />
             <figcaption className="mx-auto -mt-2.25 w-max rotate-2 rounded-tag bg-ink px-3 py-1.75 font-heading font-black text-card">
-              {isEnglish ? 'Nice try, human.' : 'Buen intento, humano.'}
+              {t('niceTryHuman')}
             </figcaption>
           </figure>
         )}
