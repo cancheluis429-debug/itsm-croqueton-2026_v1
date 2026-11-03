@@ -1,4 +1,5 @@
 import type { ClassValue } from 'cn'
+import { useTranslations } from 'next-intl'
 
 import { StoryPolaroid } from '@/components/home/story-polaroid'
 import { Dog } from '@/components/illustrations/dog'
@@ -16,6 +17,7 @@ function MemePlaceholder({
   mood: string
   note: string
 }) {
+  const t = useTranslations('MemePlaceholder')
   return (
     <StoryPolaroid
       className={['[&>div]:grid [&>div]:place-items-center [&>div]:bg-[#f2c65e]', className]}
@@ -27,7 +29,7 @@ function MemePlaceholder({
       </span>
       <Dog mood={mood} className="size-[82%] self-end" />
       <span className="absolute right-3 bottom-3 z-2 rounded-pill bg-ink px-2.5 py-1.5 text-center font-heading text-tiny font-black tracking-label text-white uppercase">
-        Tu Cheems va aquí
+        {t('cheemsPlaceholder')}
       </span>
     </StoryPolaroid>
   )
