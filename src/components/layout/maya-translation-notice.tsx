@@ -1,9 +1,10 @@
 'use client'
 
-import { useLanguage } from '@/providers/language-provider'
+import { useLocale, useTranslations } from 'next-intl'
 
 function MayaTranslationNotice() {
-  const { language } = useLanguage()
+  const language = useLocale()
+  const t = useTranslations('MayaTranslationNotice')
 
   if (language !== 'yua') return null
 
@@ -13,9 +14,7 @@ function MayaTranslationNotice() {
       role="status"
     >
       <strong className="block font-heading text-[16px]">Maaya t&apos;aan</strong>
-      <span className="block">
-        Traducción comunitaria en revisión. El contenido se muestra temporalmente en español.
-      </span>
+      <span className="block">{t('description')}</span>
     </aside>
   )
 }
