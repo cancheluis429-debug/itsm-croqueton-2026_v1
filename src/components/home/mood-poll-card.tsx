@@ -1,11 +1,11 @@
 'use client'
 
 import { cn, type ClassValue } from 'cn'
+import { useTranslations } from 'next-intl'
 import Image from 'next/image'
 import { useState, type ComponentProps } from 'react'
 
 import { StoryPolaroid } from '@/components/home/story-polaroid'
-import { useLanguage } from '@/providers/language-provider'
 
 function MoodPollCard({
   alt,
@@ -18,10 +18,10 @@ function MoodPollCard({
   label: string
   src: ComponentProps<typeof Image>['src']
 }) {
-  const { language } = useLanguage()
+  const t = useTranslations('MoodPollCard')
+
   const [selectedMood, setSelectedMood] = useState<string | null>(null)
 
-  const isEnglish = language === 'en'
   const hasResults = selectedMood !== null
 
   return (
@@ -29,7 +29,7 @@ function MoodPollCard({
       <Image src={src} alt={alt} className="block size-full object-cover" />
       <div
         className="absolute right-[1.1%] bottom-[5.8%] left-[33.1%] z-4 grid h-[17.2%] grid-cols-[1fr_1fr] gap-0.5"
-        aria-label={isEnglish ? 'How do I look? Poll' : 'Encuesta: c\xF3mo me veo'}
+        aria-label={t('howDoILookPoll')}
       >
         <button
           type="button"
@@ -48,7 +48,7 @@ function MoodPollCard({
                 hasResults ? 'text-[clamp(9px,1.25vw,14px)]' : 'text-[clamp(13px,2.3vw,27px)]'
               }
             >
-              {isEnglish ? 'Happy' : 'Feliz'}
+              {t('happy')}
             </span>
             <strong
               className={cn(
@@ -91,7 +91,7 @@ function MoodPollCard({
                 hasResults ? 'text-[clamp(9px,1.25vw,14px)]' : 'text-[clamp(13px,2.3vw,27px)]'
               }
             >
-              {isEnglish ? 'You were crying' : 'Estuviste llorando'}
+              {t('youWereCrying')}
             </span>
             <strong
               className={cn(
@@ -119,11 +119,7 @@ function MoodPollCard({
         </button>
       </div>
       <span className="absolute size-px overflow-hidden [clip-path:inset(50%)]" aria-live="polite">
-        {hasResults
-          ? isEnglish
-            ? 'Poll results: Happy 60%, You were crying 40%.'
-            : 'Resultados: Feliz 60%, Estuviste llorando 40%.'
-          : ''}
+        {hasResults ? t('pollResultsHappy60YouWereCrying40') : ''}
       </span>
     </StoryPolaroid>
   )
